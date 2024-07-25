@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import './Search.css';
 
 const Search = ({ onSearch }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(''); // State for storing the search query
 
+   // Function to handle search input changes
   const handleSearch = (e) => {
     setQuery(e.target.value);
-    onSearch(e.target.value);
+    onSearch(e.target.value);  // Call onSearch function 
   };
 
   return (
