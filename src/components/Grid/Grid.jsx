@@ -4,15 +4,18 @@ import axios from 'axios';
 import Search from '../Search/Search';
 import './Grid.css';
 
+// Grid component for displaying content in a grid layout with infinite scrolling
 const Grid = () => {
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [page, setPage] = useState(1);
+  const [data, setData] = useState([]); // State for storing the data
+  const [filteredData, setFilteredData] = useState([]); // State for storing the filtered data
+  const [page, setPage] = useState(1); // State for keeping track of the current page
 
+  // useEffect hook to fetch data when the component mounts
   useEffect(() => {
     fetchMoreData();
   }, []);
 
+  // Function to fetch more data from the API
   const fetchMoreData = () => {
     axios.get(`https://test.create.diagnal.com/data/page${page}.json`)
       .then(res => {
@@ -23,6 +26,7 @@ const Grid = () => {
       });
   };
 
+    // Function to handle the search functionality
   const handleSearch = (query) => {
     if (query) {
       const filtered = data.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
