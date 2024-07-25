@@ -1,5 +1,5 @@
 .app-container {
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Ensure no scroll bars are shown for the main container */
+  overflow: hidden; /*no scroll bars */
 }
