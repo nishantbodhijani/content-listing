@@ -9,6 +9,7 @@ const Grid = () => {
   const [data, setData] = useState([]); // State for storing the data
   const [filteredData, setFilteredData] = useState([]); // State for storing the filtered data
   const [page, setPage] = useState(1); // State for keeping track of the current page
+  const [hasMore, setHasMore] = useState(true); // State to check if there are more data to fetch
   const [showSearch, setShowSearch] = useState(false); // State for toggling search field visibility
 
   // useEffect hook to fetch data when the component mounts
@@ -21,11 +22,18 @@ const Grid = () => {
     axios.get(`https://test.create.diagnal.com/data/page${page}.json`)
       .then(res => {
         const newData = res.data.page['content-items'].content;
-        setData(prevData => [...prevData, ...newData]);
-        setFilteredData(prevData => [...prevData, ...newData]);
-        setPage(page + 1);
+        if (newData.length === 0) {
+          setHasMore(false);
+        } else {
+          setData(prevData => [...prevData, ...newData]);
+          setFilteredData(prevData => [...prevData, ...newData]);
+          setPage(page + 1);
+        }
       })
-      .catch(err => console.error("Failed to fetch data: ", err));
+      .catch(err => {
+        console.error("Failed to fetch data: ", err);
+        setHasMore(false);
+      });
   };
 
   // Function to handle the search functionality
@@ -73,8 +81,17 @@ const Grid = () => {
       <InfiniteScroll
         dataLength={filteredData.length}
         next={fetchMoreData}
-        hasMore={true}
-        loader={<h4>Loading...</h4>}
+        hasMore={hasMore}
+        loader={
+          <div className="loader">
+            <img src="https://test.create.diagnal.com/images/placeholder_for_missing_posters.png" alt="Loading..." />
+          </div>
+        }
+        endMessage={
+          <p style={{ textAlign: 'center', color: 'white' }}>
+            <b>No more content available</b>
+          </p>
+        }
       >
         <div className="grid-container">
           {/* Render grid items */}
